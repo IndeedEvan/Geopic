@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 package com.mycompany.mavenproject1;
-    
+
 import com.drew.imaging.ImageProcessingException;
 import java.awt.Toolkit;
 import java.io.File;
