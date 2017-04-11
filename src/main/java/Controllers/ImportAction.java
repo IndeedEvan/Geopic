@@ -44,17 +44,25 @@ public class ImportAction {
 
     private final File[] files;
     private final ArrayList<ArrayList<String>> stmts;
-    private ArrayList<File> filestoinsert = new ArrayList<File>();
+    private final ArrayList<File> filestoinsert = new ArrayList<>();
 
     public ImportAction(File[] f) {
         this.files = f;
         this.stmts = new ArrayList<>();
+        File thumb = new File("thumb");
+        if (!thumb.exists()) {
 
+            try {
+                thumb.mkdir();
+            } catch (SecurityException se) {
+                // a faire!!
+            }
+        }
     }
 
     public void files() throws SQLException, NullPointerException, NoGPStag, IOException, MetadataException, ImageProcessingException, ParseException {
-        
-        ArrayList<File> resources = new ArrayList<File>(Arrays.asList(files));
+
+        ArrayList<File> resources = new ArrayList<>(Arrays.asList(files));
         dbInsert(resources);
 
     }
@@ -66,11 +74,8 @@ public class ImportAction {
         for (File f : list) {
             if (f.isFile()) {
                 filestoinsert.add(f);
-                //System.out.println(f.getAbsoluteFile());
             }
         }
-        //System.out.println(filestoinsert.size());
-        //File[] resources = filestoinsert.toArray(new File[filestoinsert.size()]);
         dbInsert(filestoinsert);
 
     }
@@ -80,7 +85,6 @@ public class ImportAction {
         for (File fs : files) {
 
             browser(fs.toString());
-            //File[] resources = filestoinsert.toArray(new File[filestoinsert.size()]);
             dbInsert(filestoinsert);
         }
 
@@ -106,9 +110,6 @@ public class ImportAction {
 
     private void dbInsert(ArrayList<File> filestoinsert) throws SQLException, NullPointerException, NoGPStag, IOException, MetadataException, ImageProcessingException, ParseException {
         Metadata metadata;
-        //int prgsval = 0;
-        //int prgspro = 100 / files.length;
-        //final Prgsbarre prgs = new Prgsbarre(prgsval);
         List<String> extension = Arrays.asList("jpg", "jpeg");
 
         for (File f1 : filestoinsert) {
@@ -142,7 +143,7 @@ public class ImportAction {
                     GpsDescriptor gpsDescriptor = new GpsDescriptor(gpsDir);
 
                     if (gpsDir != null) {
-                        ArrayList<String> query = new ArrayList<String>();
+                        ArrayList<String> query = new ArrayList<>();
                         GeoLocation geo;
                         String sql1 = "INSERT INTO IMG_PATH (IMG_PATH) VALUES ("
                                 + "'" + f1.getAbsoluteFile().toString() + "'" + ");";
@@ -162,12 +163,8 @@ public class ImportAction {
                                 + gpsDescriptor.getGpsTimeStampDescription() + "'" + ");";
                         query.add(sql3);
                         stmts.add(query);
-                        //ImageThumb imgth=new ImageThumb(f1);
-                        ImageThumb_DEP test = new ImageThumb_DEP(f1);
+                        ImageThumb test = new ImageThumb(f1);
 
-                        //prgsval += prgspro;
-                        //System.out.println(prgsval);
-                        //prgs.Prgsupdate(prgsval);
                     } else {
                         throw new NoGPStag("No GPS Data found", f1);
                     }
@@ -177,7 +174,6 @@ public class ImportAction {
 
             }
         }
-        //prgs.dispose();
 
         if (stmts.size() > 0) {
             try (
@@ -189,7 +185,7 @@ public class ImportAction {
 
                         for (String sql : st) {
 
-                            int status = stmt.executeUpdate(sql);
+                            stmt.executeUpdate(sql);
 
                         }
 

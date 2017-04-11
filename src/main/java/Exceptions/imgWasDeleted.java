@@ -5,6 +5,7 @@
  */
 package Exceptions;
 
+import Controllers.DeleteAction;
 import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -31,23 +32,10 @@ public class imgWasDeleted extends IOException {
                     JOptionPane.QUESTION_MESSAGE, null, options, options[1]);
 
             if (dialogButton == JOptionPane.YES_OPTION) {
-                DeletePhoto(path, false);
+                new DeleteAction(path);
 
             }
 
     }
 
-  
-    public void DeletePhoto(String path, boolean del) {
-        String sql = "DELETE FROM IMG_PATH WHERE IMG_PATH='" + path + "';";
-        try (Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
-            Statement stmt = c.createStatement();
-            c.setAutoCommit(false);
-            stmt.executeUpdate(sql);
-            c.commit();
-            c.close();
-       } catch (SQLException ex){
-           System.out.println("DeletePhoto imgwasDeleted");
-       }
-    }
 }

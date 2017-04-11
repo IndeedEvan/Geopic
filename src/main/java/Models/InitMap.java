@@ -6,8 +6,6 @@
 package Models;
 
 import Exceptions.imgWasDeleted;
-import Views.JScroll;
-import Views.main;
 import com.drew.imaging.ImageProcessingException;
 import java.io.File;
 import java.io.IOException;
@@ -38,7 +36,7 @@ import org.jxmapviewer.viewer.WaypointPainter;
  */
 public class InitMap extends JXMapKit {
 
-    private ArrayList<SwingWaypoint> swing;
+    private ArrayList<SWayMaker> swing;
     private ArrayList<ImageMeta> imgmeta;
     private ArrayList<GeoPosition> geos;
 
@@ -71,7 +69,6 @@ public class InitMap extends JXMapKit {
             String path;
             GeoPosition geo;
             ImageMeta img;
-            
 
             while (rs.next()) {
                 path = rs.getString("IMG_PATH");
@@ -80,7 +77,6 @@ public class InitMap extends JXMapKit {
                 geos.add(geo);
                 imgmeta.add(img);
                 
-
             }
 
             rs.close();
@@ -91,12 +87,10 @@ public class InitMap extends JXMapKit {
 
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
         }
-        //ArrayList<File> files=new ArrayList<>();
         for (ImageMeta ima : imgmeta) {
             File f = new File(ima.GetImgPath());
             if (f.exists()) {
-                swing.add(new SwingWaypoint(f, ima.getGPS()));
-                //files.add(f);
+                swing.add(new SWayMaker(f, ima.getGPS()));
             } else {
                 imgWasDeleted exp=new imgWasDeleted(f.toString());
                 exp.msg(exp.getMessage());
@@ -121,24 +115,19 @@ public class InitMap extends JXMapKit {
         this.getMainMap().addKeyListener(new PanKeyListener(this.getMainMap()));
 
         // Create waypoints from the geo-positions
-        Set<SwingWaypoint> waypoints = new HashSet<SwingWaypoint>(swing);
+        Set<SWayMaker> waypoints = new HashSet<SWayMaker>(swing);
         // Set the overlay painter
-        WaypointPainter<SwingWaypoint> swingWaypointPainter = new SwingWaypointOverlayPainter();
+        WaypointPainter<SWayMaker> swingWaypointPainter = new SWayPainter();
         swingWaypointPainter.setWaypoints(waypoints);
         this.getMainMap().setOverlayPainter(swingWaypointPainter);
 
         // Add the JButtons to the map viewer
         ArrayList<GeoPosition> gP = new ArrayList<>();
-        for (SwingWaypoint w : waypoints) {
+        for (SWayMaker w : waypoints) {
             this.getMainMap().add(w.getButton());
             gP.add(w.getPosition());
-            //
 
-            //prgsval++;
-            //main.pgs.Prgsupdate((int) (100/(imgnb/prgsval)));
         }
-        //  System.out.println(Math.hypot(gP.get(0).getLatitude()-gP.get(1).getLatitude(),
-        //        gP.get(0).getLongitude()- gP.get(1).getLongitude()));
 
     }
 

@@ -5,9 +5,9 @@
  */
 package Views;
 
+import Controllers.DeleteAction;
 import Controllers.ImportAction;
 import Exceptions.NoGPStag;
-import Exceptions.imgWasDeleted;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
 import java.awt.Dimension;
@@ -228,8 +228,10 @@ public class main extends javax.swing.JFrame {
 
     private void jBDeleteimgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteimgActionPerformed
         // TODO add your handling code here:
-        imgWasDeleted ex = new imgWasDeleted("");
-        ex.msg(path);
+        new DeleteAction(path);
+        
+        //imgWasDeleted ex = new imgWasDeleted("");
+        //ex.msg(path);
     }//GEN-LAST:event_jBDeleteimgActionPerformed
 
     private void jM1It1Act1ImportFolder(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM1It1Act1ImportFolder
