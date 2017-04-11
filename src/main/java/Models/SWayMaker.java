@@ -2,7 +2,7 @@ package Models;
 
 import Views.main;
 import Controllers.ImageThumb;
-import Controllers.ViewrBGControler;
+import Controllers.ViewerBGControler;
 import Exceptions.imgWasDeleted;
 import java.awt.*;
 import java.awt.event.MouseEvent;
@@ -64,7 +64,7 @@ public class SWayMaker extends DefaultWaypoint {
     public void viewdis(javax.swing.JDesktopPane jDeskp, File path) throws imgWasDeleted {
         try {
             BufferedImage image = ImageIO.read(path);
-            jDeskp.setBorder(new ViewrBGControler(image, jDeskp.getSize()));
+            jDeskp.setBorder(new ViewerBGControler(image, jDeskp.getSize()));
         } catch (IOException ex) {
             throw new imgWasDeleted("was del");
 

@@ -17,11 +17,11 @@ import javax.swing.border.Border;
  *
  * @author Ehsan
  */
-public class ViewrBGControler implements Border{
+public class ViewerBGControler implements Border{
     private final BufferedImage back;
     private final Dimension dim;
     
-    public ViewrBGControler(BufferedImage back,Dimension d) {
+    public ViewerBGControler(BufferedImage back,Dimension d) {
         
         this.back=back;
         this.dim=d;
