@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 
 /**
  *
- * @author Ehsan
+ * @author Sabrina
  */
 public class DeleteAction {
 
