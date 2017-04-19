@@ -13,6 +13,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
+
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
@@ -30,9 +32,18 @@ public class SWayMaker extends DefaultWaypoint {
     public SWayMaker(File f, GeoPosition coord) throws IOException {
         super(coord);
         this.path=f.toString();
+        
         File thumb = new File("thumb/" + f.getName());
+        
+        if (!(thumb.getParentFile()).exists()){
+        	thumb.getParentFile().mkdir();
+            JOptionPane.showMessageDialog(null, "Le dossier étant inexistant, est en cours de création. Veuillez patientez.");
+
+        }
+   	 
+        
         if (!thumb.exists()) {
-            new ImageThumb(f);
+        	new ImageThumb(f);
         }
 
         this.icon = new ImageIcon(thumb.toString());
