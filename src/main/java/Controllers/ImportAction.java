@@ -34,11 +34,14 @@ import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
+import javax.swing.JOptionPane;
+
 import org.apache.commons.io.FilenameUtils;
 
 /**
  *
- * @author Ehsan
+ * @author Sabrina
  */
 public class ImportAction {
 
@@ -50,14 +53,7 @@ public class ImportAction {
         this.files = f;
         this.stmts = new ArrayList<>();
         File thumb = new File("thumb");
-        if (!thumb.exists()) {
-
-            try {
-                thumb.mkdir();
-            } catch (SecurityException se) {
-                // a faire!!
-            }
-        }
+        
     }
 
     public void files() throws SQLException, NullPointerException, NoGPStag, IOException, MetadataException, ImageProcessingException, ParseException {
