@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controllers;
 
 import Exceptions.NoGPStag;
@@ -35,15 +30,22 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import javax.swing.JOptionPane;
 
 import org.apache.commons.io.FilenameUtils;
 
 /**
- *
  * @author Sabrina
  */
+
 public class ImportAction {
+	
+	/* Permet d'importer une image dans la base de donnée
+	 ImportAction() constructeur de l'action d'importation, vérifie si le fichier thumb existe, sinon il le créer
+	 files() permet l'importation de fichiers
+	 folders() permet l'importation de dossiers
+	 folderSubfolder() permet l'importation de sous-dossier 
+	 browser() permet de parcourir tous les sous-dossiers trouvés et envoyé une liste des images de tous ces sous-dossiers  
+	 dbInsert() créer des querys pour chaque image, tous les querys sont ensuite stocké dans le statement stms */
 
     private final File[] files;
     private final ArrayList<ArrayList<String>> stmts;
@@ -53,16 +55,17 @@ public class ImportAction {
         this.files = f;
         this.stmts = new ArrayList<>();
         File thumb = new File("thumb");
-        
+        if (! thumb.exists()){
+        	thumb.mkdir();
+        }
     }
 
     public void files() throws SQLException, NullPointerException, NoGPStag, IOException, MetadataException, ImageProcessingException, ParseException {
 
         ArrayList<File> resources = new ArrayList<>(Arrays.asList(files));
         dbInsert(resources);
-
     }
-
+    
     public void folders() throws SQLException, NullPointerException, NoGPStag, IOException, MetadataException, ImageProcessingException, ParseException {
 
         File[] list = files[0].listFiles();
@@ -73,7 +76,6 @@ public class ImportAction {
             }
         }
         dbInsert(filestoinsert);
-
     }
 
     public void folderSubfolder() throws SQLException, NullPointerException, NoGPStag, IOException, MetadataException, ImageProcessingException, ParseException {
@@ -83,7 +85,6 @@ public class ImportAction {
             browser(fs.toString());
             dbInsert(filestoinsert);
         }
-
     }
 
     public void browser(String path) {
@@ -128,7 +129,7 @@ public class ImportAction {
                                     .readAttributes();
                     FileTime fileTime = view.creationTime();
 
-                    Date date = df.parse(df.format(fileTime.toMillis()));
+                    Date date = df.parse(df.format(fileTime.toMillis())); // convertion de la date d'importation dans le format correspondant de la BDD
                     df.format(date);
                     int year = df.getCalendar().get(Calendar.YEAR);
                     int month = df.getCalendar().get(Calendar.MONTH) + 1;
@@ -138,18 +139,20 @@ public class ImportAction {
                     GpsDirectory gpsDir = (GpsDirectory) metadata.getFirstDirectoryOfType(GpsDirectory.class);
                     GpsDescriptor gpsDescriptor = new GpsDescriptor(gpsDir);
 
-                    if (gpsDir != null) {
+                    if (gpsDir != null) { //si il y a des données gps
+     
                         ArrayList<String> query = new ArrayList<>();
                         GeoLocation geo;
                         String sql1 = "INSERT INTO IMG_PATH (IMG_PATH) VALUES ("
-                                + "'" + f1.getAbsoluteFile().toString() + "'" + ");";
+                                + "'" + f1.getAbsoluteFile().toString() + "'" + ");"; //dans la table IMG_PATH on y indique le chemin de l'image
                         query.add(sql1);
 
                         String sql2 = "INSERT INTO IMG_META (IMG_WIDTH,IMG_HEIGHT,IMG_CR_DATE) VALUES ("
-                                + String.valueOf(wd) + "," + String.valueOf(hg) + "," + "'" + datey + "'" + ");";
-                        query.add(sql2);
+                                + String.valueOf(wd) + "," + String.valueOf(hg) + "," + "'" + datey + "'" + ");"; //dans la table IMG_META on y indique la taille et la date d'importation de l'image
+                        query.add(sql2); 
 
                         geo = gpsDir.getGeoLocation();
+                        // verification qu'il y es des coordonnée non null (non égal à 0)
                         if (geo == null) {
                             throw new NoGPStag("Geo is Null", f1);
                         }
@@ -158,8 +161,8 @@ public class ImportAction {
                                 + gpsDescriptor.getGpsAltitudeDescription() + "'" + "," + "'"
                                 + gpsDescriptor.getGpsTimeStampDescription() + "'" + ");";
                         query.add(sql3);
-                        stmts.add(query);
-                        ImageThumb test = new ImageThumb(f1);
+                        stmts.add(query); 
+                        new ImageThumb(f1); // creation d'une miniature
 
                     } else {
                         throw new NoGPStag("No GPS Data found", f1);
@@ -170,19 +173,15 @@ public class ImportAction {
 
             }
         }
-
-        if (stmts.size() > 0) {
+        if (stmts.size() > 0) { // si on a des images alors on fais la connection
             try (
                     Connection c = DriverManager.getConnection("jdbc:sqlite:test.db")) {
                 c.setAutoCommit(false);
                 for (ArrayList query : stmts) {
                     ArrayList<String> st = query;
                     try (Statement stmt = c.createStatement()) {
-
                         for (String sql : st) {
-
                             stmt.executeUpdate(sql);
-
                         }
 
                     } catch (SQLException e) {
@@ -193,7 +192,6 @@ public class ImportAction {
                     }
                     c.commit();
                 }
-
                 c.close();
             }
         }

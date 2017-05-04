@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controllers;
 
 import java.io.File;
@@ -10,18 +5,19 @@ import java.io.IOException;
 import net.coobird.thumbnailator.Thumbnails;
 
 /**
- *
  * @author Ehsan
  */
-public class ImageThumb {
 
+public class ImageThumb {
+	
+	/* Permet de créer les miniatures des images(60x60) et les stocker dans le dossier thumb 
+	 * ImageThumb() créer les miniatures et leur donne le nom initial de l'image correspondante
+	 * getFileExtension() permet l'adaptation des différentes extensions mais non utilisée */
+	
     public ImageThumb(File f) throws IOException{
-        
         Thumbnails.of(f).size(60, 60)
                 .toFile(new File("thumb/" + f.getName()
                         ));
-  
-
     }
 
     private String getFileExtension(File file) {
