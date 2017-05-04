@@ -1,7 +1,7 @@
 package Views;
 
-
 import java.awt.Image;
+
 import javax.swing.JPanel;
 import java.awt.Dimension;
 import javax.swing.ImageIcon;
@@ -21,6 +21,10 @@ import javax.imageio.ImageIO;
 import javax.swing.JCheckBox;
 import javax.swing.JDesktopPane;
 import javax.swing.JOptionPane;
+
+/**
+ * @author Manon / Thida
+ */
 
 public final class Viewer extends JDesktopPane {
 
