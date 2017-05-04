@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Controllers;
 
 import java.io.File;
@@ -14,10 +9,14 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Sabrina
  */
-public class DeleteAction {
+
+public class DeleteAction { 
+	/* Permet de supprimer une image de la base de donnée
+	 DeleteAction() affiche un message pour confirmer ou non la suppression
+	 DeletePhoto() suppression de l'image dans la base de donnée (SQL)
+	 -> +connexion à la base de données si l'image existe */
 
     public DeleteAction(String path) {
         JCheckBox checkbox = new JCheckBox("Supprimer ce fichier de façon permanente.");
