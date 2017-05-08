@@ -2,18 +2,23 @@ package Views;
 
 import Controllers.DeleteAction;
 import Controllers.ImportAction;
+import Controllers.SearchAction;
 import Exceptions.NoGPStag;
+import Models.SWayMaker;
 import com.drew.imaging.ImageProcessingException;
 import com.drew.metadata.MetadataException;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.text.ParseException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -26,10 +31,7 @@ public class main extends javax.swing.JFrame {
 	 * Classe principal : Initialise tous les composants de l'interface 
 	 */
 	
-    private final Dimension d = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
-    private jDMap1 jDmap;
-    public static String path;
-
+    
     public main() {
         
         initComponents();
@@ -68,7 +70,7 @@ public class main extends javax.swing.JFrame {
         setBackground(new java.awt.Color(255, 255, 255));
 
         jTPane1.setBackground(new java.awt.Color(255, 255, 255));
-
+        jDPViewer.setBackground(Color.WHITE);
         javax.swing.GroupLayout jDPMapLayout = new javax.swing.GroupLayout(jDPMap);
         jDPMap.setLayout(jDPMapLayout);
         jDPMapLayout.setHorizontalGroup(
@@ -166,9 +168,15 @@ public class main extends javax.swing.JFrame {
 
         jMBar.add(jM1);
 
-        jM2.setText("Edit");
+        jM2.setText("Search");
 
-        jM2Item1.setText("jMenuItem3");
+        jM2Item1.setText("Search by Date");
+        jM2Item1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.ALT_MASK));
+        jM2Item1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jM2Item1ActionPerformed(evt);
+            }
+        });
         jM2.add(jM2Item1);
 
         jMBar.add(jM2);
@@ -221,8 +229,16 @@ public class main extends javax.swing.JFrame {
         }
     }
 
-    private void jBDeleteimgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDeleteimgActionPerformed
-        new DeleteAction(path);   
+    private void jBDeleteimgActionPerformed(java.awt.event.ActionEvent evt) {                                            
+        new DeleteAction(path);
+        ArrayList<SWayMaker> sw = this.jDmap.GetSWayPoints();
+            
+            for (SWayMaker swmk: sw) {
+                if (swmk.getPath()==path) {
+                    swmk.SetDeleted();
+                }
+            }
+ 
     }
 
     private void jM1It1Act1ImportFolder(java.awt.event.ActionEvent evt) {
@@ -271,9 +287,27 @@ public class main extends javax.swing.JFrame {
             } catch (SQLException | NullPointerException | NoGPStag | IOException | MetadataException | ImageProcessingException | ParseException | ClassNotFoundException ex) {
                 Logger.getLogger(main.class.getName()).log(Level.SEVERE, null, ex);
             }
-
         }
     }
+      private void jM2Item1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jM2Item1ActionPerformed
+        // TODO add your handling code here:
+        SearchAction sc = new SearchAction();
+        ArrayList<SWayMaker> sw = this.jDmap.GetSWayPoints();
+        if (sc.getAnswer() == JOptionPane.YES_OPTION) {
+
+            for (SWayMaker swmk : sw) {
+                if (swmk.GetCrDate().after(sc.getFromDate()) && swmk.GetCrDate().before(sc.getToDate())) {
+                    swmk.SetTag();
+                } else {
+                    swmk.RemoveTag();
+                }
+            }
+        } else {
+            for (SWayMaker swmk : sw) {
+                swmk.RemoveTag();
+            }
+        }
+      }
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -289,6 +323,9 @@ public class main extends javax.swing.JFrame {
         });
     }
 
+private final Dimension d = new Dimension(Toolkit.getDefaultToolkit().getScreenSize());
+    private jDMap1 jDmap;
+    public static String path;
     private javax.swing.JScrollPane PreviewPane;
     private javax.swing.JButton jBDeleteimg;
     private javax.swing.JButton jBSlideShow;

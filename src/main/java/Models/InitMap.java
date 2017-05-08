@@ -5,6 +5,7 @@
  */
 package Models;
 
+import Controllers.SWayPainter;
 import Exceptions.imgWasDeleted;
 import com.drew.imaging.ImageProcessingException;
 import java.io.File;
@@ -14,9 +15,15 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.event.MouseInputListener;
 import org.jxmapviewer.JXMapKit;
 import org.jxmapviewer.VirtualEarthTileFactoryInfo;
@@ -63,9 +70,9 @@ public class InitMap extends JXMapKit {
             c.setAutoCommit(false);
 
             stmt = c.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT distinct IMG_PATH.IMG_PATH,"
-                    + "IMG_GPS.IMG_LAT,IMG_GPS.IMG_LONG FROM IMG_PATH,"
-                    + "IMG_GPS WHERE IMG_PATH.IMG_ID=IMG_GPS.IMG_ID;");
+            ResultSet rs = stmt.executeQuery("SELECT distinct IMG_PATH.IMG_PATH,\n" +
+            "IMG_GPS.IMG_LAT,IMG_GPS.IMG_LONG, IMG_META.IMG_CR_DATE FROM IMG_PATH,\n" +
+            "IMG_GPS,IMG_META WHERE IMG_PATH.IMG_ID=IMG_GPS.IMG_ID AND IMG_PATH.IMG_ID=IMG_META.IMG_ID");
             String path;
             GeoPosition geo;
             ImageMeta img;
@@ -73,10 +80,12 @@ public class InitMap extends JXMapKit {
             while (rs.next()) {
                 path = rs.getString("IMG_PATH");
                 geo = new GeoPosition(rs.getDouble("IMG_LAT"), rs.getDouble("IMG_LONG"));
-                img = new ImageMeta(new File(path), geo);
+                DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+                Date d = df.parse(rs.getString("IMG_CR_DATE"));
+                img = new ImageMeta(new File(path), geo,d);
                 geos.add(geo);
                 imgmeta.add(img);
-                
+
             }
 
             rs.close();
@@ -86,17 +95,19 @@ public class InitMap extends JXMapKit {
         } catch (ImageProcessingException | SQLException e) {
 
             System.err.println(e.getClass().getName() + ": " + e.getMessage());
+        } catch (ParseException ex) {
+            Logger.getLogger(InitMap.class.getName()).log(Level.SEVERE, null, ex);
         }
+        
         for (ImageMeta ima : imgmeta) {
             File f = new File(ima.GetImgPath());
             if (f.exists()) {
-                swing.add(new SWayMaker(f, ima.getGPS()));
+                swing.add(new SWayMaker(f, ima.getGPS(), ima.getCrDate(), false,false));
             } else {
-                imgWasDeleted exp=new imgWasDeleted(f.toString());
+                imgWasDeleted exp = new imgWasDeleted(f.toString());
                 exp.msg(exp.getMessage());
             }
         }
-        
 
         if (swing.isEmpty()) {
             this.getMainMap().setZoom(17);
@@ -129,6 +140,10 @@ public class InitMap extends JXMapKit {
 
         }
 
+    }
+
+   public ArrayList<SWayMaker> GetSWayPointsMAP(){
+        return this.swing;
     }
 
 }

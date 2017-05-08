@@ -1,13 +1,15 @@
 package Views;
 
 import Models.InitMap;
+import Models.SWayMaker;
 import com.drew.imaging.ImageProcessingException;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import org.jxmapviewer.viewer.GeoPosition;
 
 /**
- * @author Manon / Eshan
+ * @author Manon / Ehsan
  */
 
 public class jDMap1 extends javax.swing.JDesktopPane {
@@ -144,4 +146,9 @@ public class jDMap1 extends javax.swing.JDesktopPane {
     private javax.swing.JButton jBZoomOut;
     private javax.swing.JDesktopPane jDPMap;
     private javax.swing.JSlider jSZoom;
+
+    public ArrayList<SWayMaker> GetSWayPoints() {
+        return this.map.GetSWayPointsMAP();
+    }
+
 }
