@@ -1,17 +1,17 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Exceptions;
 
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Ehsan
  */
+ 
 public class isImported extends java.sql.SQLException {
+
+	/**
+	* Evite d'importer 2 fois la même image
+	*/
 
     public isImported(String msg) {
         super(msg);

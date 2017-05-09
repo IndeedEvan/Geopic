@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Models;
 
 import Controllers.SWayPainter;
@@ -38,11 +34,15 @@ import org.jxmapviewer.viewer.TileFactoryInfo;
 import org.jxmapviewer.viewer.WaypointPainter;
 
 /**
- *
  * @author Ehsan
  */
+ 
 public class InitMap extends JXMapKit {
-
+	
+	/**
+	* Création de l'objet carte, cherche les images dans la BDD, création de l'objet image avec ses données
+	*/
+	
     private ArrayList<SWayMaker> swing;
     private ArrayList<ImageMeta> imgmeta;
     private ArrayList<GeoPosition> geos;
@@ -125,14 +125,13 @@ public class InitMap extends JXMapKit {
         this.getMainMap().addMouseWheelListener(new ZoomMouseWheelListenerCenter(this.getMainMap()));
         this.getMainMap().addKeyListener(new PanKeyListener(this.getMainMap()));
 
-        // Create waypoints from the geo-positions
+       
         Set<SWayMaker> waypoints = new HashSet<SWayMaker>(swing);
-        // Set the overlay painter
+       
         WaypointPainter<SWayMaker> swingWaypointPainter = new SWayPainter();
         swingWaypointPainter.setWaypoints(waypoints);
         this.getMainMap().setOverlayPainter(swingWaypointPainter);
 
-        // Add the JButtons to the map viewer
         ArrayList<GeoPosition> gP = new ArrayList<>();
         for (SWayMaker w : waypoints) {
             this.getMainMap().add(w.getButton());

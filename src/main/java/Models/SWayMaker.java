@@ -15,17 +15,19 @@ import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
-
 import org.jxmapviewer.viewer.DefaultWaypoint;
 import org.jxmapviewer.viewer.GeoPosition;
 
 /**
- * A waypoint that is represented by a button on the map.
- *
  * @author Ehsan
  */
+ 
 public class SWayMaker extends DefaultWaypoint {
-
+	
+	/**
+	* Création d'un point géolocalisé
+	*/
+	
     private final String path;
     private final JButton button;
     private final ImageIcon icon;
@@ -88,7 +90,6 @@ public class SWayMaker extends DefaultWaypoint {
     }
 
     /**
-     *
      * @param jDeskp
      * @param path
      * @throws Exceptions.imgWasDeleted

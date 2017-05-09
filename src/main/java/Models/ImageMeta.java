@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Models;
 
 import com.drew.imaging.ImageProcessingException;
@@ -11,7 +7,15 @@ import java.io.IOException;
 import java.util.Date;
 import org.jxmapviewer.viewer.GeoPosition;
 
+/**
+ * @author Ehsan
+ */
+
 public class ImageMeta {
+	
+	/**
+	* Construction de l'image et la relie à ses coordonnées GPS + date de création
+	*/
 
     private final File f;
     private final GeoPosition gps;

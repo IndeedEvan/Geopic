@@ -1,19 +1,19 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Exceptions;
 
 import java.io.File;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Ehsan
  */
+ 
 public class NoGPStag extends Exception {
-
+	
+	/**
+	* Pas de coordonées GPS présentes dans les métadonnées de l'image
+	*/
+	
     public NoGPStag(String msg,File f1) {
         super(msg);
          

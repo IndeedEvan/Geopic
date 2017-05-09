@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Exceptions;
 
 import Controllers.DeleteAction;
@@ -14,11 +10,16 @@ import java.sql.Statement;
 import javax.swing.JOptionPane;
 
 /**
- *
  * @author Ehsan
  */
+ 
 public class imgWasDeleted extends IOException {
-
+	
+	/**
+	* Au lancement du programme une image présente en BDD n'est plus présente sur le disque dur de l'utilisateur
+	* Affichage de l'erreur
+	*/
+	
     public imgWasDeleted(String msg) {
         super(msg);
     }

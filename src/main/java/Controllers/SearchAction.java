@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package Controllers;
 
 import java.text.DateFormat;
@@ -13,10 +9,17 @@ import javax.swing.JOptionPane;
 import org.jdesktop.swingx.JXDatePicker;
 
 /**
- *
- * @author Ehsan
+ * @author Evan
  */
+ 
 public final class SearchAction {
+	/**
+	* Classe qui permet d'effectuer une recherche d'image par date
+	* Elle affiche le popup et le formulaire
+	* get from/to date() : relever les dates du formulaire
+	* getAnswer() : l'utilisateur à validé ou annulé ?
+	*/
+	
     private final JXDatePicker from = new JXDatePicker();
     private final JXDatePicker to = new JXDatePicker();
     private final DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
@@ -40,8 +43,6 @@ public final class SearchAction {
         
         
     }
-    
-   
     
     public Date getFromDate(){
         return this.from.getDate();

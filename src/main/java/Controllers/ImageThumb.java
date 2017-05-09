@@ -5,7 +5,7 @@ import java.io.IOException;
 import net.coobird.thumbnailator.Thumbnails;
 
 /**
- * @author Ehsan
+ * @author Ehsan / Sabrina
  */
 
 public class ImageThumb {

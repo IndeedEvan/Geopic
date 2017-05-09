@@ -12,13 +12,17 @@ import javax.swing.BorderFactory;
 import javax.swing.JButton;
 
 /**
- * "Paints" the Swing waypoints. In fact, just takes care of correct positioning
- * of the representing (button/image).
- *
  * @author Ehsan
  */
+ 
 public class SWayPainter extends WaypointPainter<SWayMaker> {
-
+	
+	/**
+	* Classe qui permet de dessiner les images (sous forme d'objet boutons) sur la carte 
+	* Permet également de surligner les images en rouge lors de la recherche
+	* Met à jour la carte après suppression d'image ou toute autre interaction
+	*/
+	 
     private ArrayList<Integer> level;
 
     @Override
